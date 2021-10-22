@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./reset.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        #background {
+            width: 100vw;
+            height: 100vh;
+            background: url(./images/bg_izakaya1.png) no-repeat;
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #game {
+            width: 1600px;
+            padding-left: 30px;
+            padding-top: 50px;
+            cursor: url(./images/cursor.png) 100 100, auto;
+        }
+
+        .card {
+            width: 130px;
+            height: 185px;
+            position: relative;
+            transform-style: preserve-3d;
+            float: left;
+            margin: 25px;
+        }
+
+        .card-back {
+            width: 100%;
+            height: 100%;
+            background-image: url(./images/card-back.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            backface-visibility: hidden;
+            -web-backface-visibility: hidden;
+        }
+
+        .card-front {
+            width: 100%;
+            height: 100%;
+            background-image: url(./images/1H.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            transform: rotateY(180deg);
+        }
+
+        .card-frontflag {
+            width: 100%;
+            height: 100%;
+            background-image: url(./images/1F.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            transform: rotateY(180deg);
+        }
+
+        .card-open {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+
+
+<!-- https://www.pngegg.com/ -->
+
+
+
+<body>
+    <div id="background">
+        <div id="game">
+        </div>
+    </div>
+
+
+
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+
+        for (let i = 0; i < 24; i++) {
+            $('#game').append(`
+                <div class="card">
+                    <div class="card-back"></div>
+                    <div class="card-front"></div>
+                </div>
+            `)
+        }
+
+
+
+        $('#game').on('click',
+            Swal.fire({
+                title: '今晚，你想來點...？',
+                text: `翻開木牌 配對國家和特色美食點餐吧！`,
+                width: 500,
+                padding: '3em',
+                background: 'url(./images/board.jpg)'
+            }))
+
+
+
+
+        // 決定花色並打散
+        for (let i = 0; i < 12; i++) {
+            //迴圈從0開始，卡片從開始所以要加 1
+            let number = i % (24 / 2) + 1
+            // 決定數字
+            $('.card').eq(i).find('.card-front').css('background-image', `url(./images/${number}H.png)`)
+            $('.card').eq(i).attr('data-card', number)
+
+            let target = Math.floor(Math.random() * 24)
+            $('.card').eq(target).insertAfter($('.card').eq(i))
+        }
+
+        for (let j = 12; j < 24; j++) {
+            let number2 = j % (24 / 2) + 1
+            $('.card').eq(j).find('.card-front').css('background-image', `url(./images/${number2}F.png)`)
+            $('.card').eq(j).attr('data-card', number2)
+
+            let target2 = Math.floor(Math.random() * 24)
+            $('.card').eq(target2).insertAfter($('.card').eq(j))
+        }
+
+
+        $('#game').on('click', '.card', function () {
+
+            if ($('.card-open').length < 2 && !$(this).hasClass('card-open')) {
+                $(this).addClass('card-open')
+            }
+
+            if ($('.card-open').length === 2) {
+                if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
+                    $('.card-open').fadeTo(1000, 0).addClass('card-clear')
+                }
+
+                setTimeout(() => {
+                    $('.card-open').removeClass('card-open')
+                }, 1500)
+            }
+
+
+            if ($('.card-clear').length === 24) {
+
+                Swal.fire({
+                    title: 'Tasty !',
+                    width: 500,
+                    padding: '3em',
+                    background: 'url(./images/board.jpg)'
+                })
+
+            }
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>

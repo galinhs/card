@@ -1,6 +1,24 @@
-# 泰山職訓前端班翻牌配對小遊戲作業
-發揮創意美化你上課完成的小遊戲，並試著加入更多功能  
+# card
 
-## 注意
-請盡量使用上課教的 GUI 工具或 git 指令繳交作業  
-若使用 GitHub 網頁進行 commit 會依次數扣分
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
